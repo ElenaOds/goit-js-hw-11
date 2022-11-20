@@ -12,33 +12,3 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
-  margin-bottom: 16px;
-}
-
-.country-list {
-  padding: 0;
-  margin: 0;
-}
-
-.list__item {
-  list-style: none;
-  display: flex;
-  align-items: center;
-}
-  .list__name {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.list__img {
-  margin-right: 10px;
-}
-
-.country-info {
-  list-style: none;
-}
