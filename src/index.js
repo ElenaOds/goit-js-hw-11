@@ -1,5 +1,6 @@
 import { imageApi } from './imageApi';
 import Notiflix from 'notiflix';
+import './css/styles.css';
 import SimpleLightbox from 'simplelightbox';
 import axios from 'axios';
 import 'simplelightbox/dist/simple-lightbox.min.css';
