@@ -1,6 +1,7 @@
-import { fetchImages } from './fetchImages';
+import { imageApi } from './imageApi';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
+import axios from 'axios';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const input = document.querySelector('input');
@@ -11,15 +12,14 @@ let gallerySimpleLightbox = new SimpleLightbox('.gallery a');
 
 
 loadButton.style.display = 'none';
-
 let page = 1;
 
 searchButton.addEventListener('click', e => {
   e.preventDefault();
   cleanGallery();
-  const trimmedValue = input.value.trim();
-  if (trimmedValue !== '') {
-    fetchImages(trimmedValue, page).then(foundData => {
+  const inputValue = input.value;
+  if (inputValue !== '') {
+    imageApi(inputValue, page).then(foundData => {
       if (foundData.hits.length === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -38,9 +38,9 @@ searchButton.addEventListener('click', e => {
 
 loadButton.addEventListener('click', () => {
   page++;
-  const trimmedValue = input.value.trim();
+  const inputValue = input.value.trim();
   loadButton.style.display = 'none';
-  fetchImages(trimmedValue, page).then(foundData => {
+  imageApi(inputValue, page).then(foundData => {
     if (foundData.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
@@ -56,33 +56,35 @@ loadButton.addEventListener('click', () => {
   });
 });
 
+
 function renderImageList(images) {
-  console.log(images, 'images');
   const markup = images
-    .map(image => {
-      console.log('img', image);
-      return `<div class="photo-card">
-       <a href="${image.largeImageURL}"><img class="photo" src="${image.webformatURL}" alt="${image.tags}" title="${image.tags}" loading="lazy"/></a>
-        <div class="info">
-           <p class="info-item">
-    <b>Likes</b> <span class="info-item-api"> ${image.likes} </span>
-</p>
-            <p class="info-item">
-                <b>Views</b> <span class="info-item-api">${image.views}</span>  
-            </p>
-            <p class="info-item">
-                <b>Comments</b> <span class="info-item-api">${image.comments}</span>  
-            </p>
-            <p class="info-item">
-                <b>Downloads</b> <span class="info-item-api">${image.downloads}</span> 
-            </p>
-        </div>
-    </div>`;
-    })
+    .map(({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) =>  {   
+   
+      return `
+                <div class="photo-card">
+                <a href="${largeImageURL}"><img class="photo" src="${webformatURL}" alt="${tags}" title="${tags}" loading="lazy"/></a>
+                    <div class="info">
+                        <p class="info-item">
+                            <b>Likes</b><br/>${likes}
+                        </p>
+                        <p class="info-item">
+                            <b>Views</b><br/>${views}
+                        </p>
+                        <p class="info-item">
+                            <b>Comments</b><br/>${comments}
+                        </p>
+                        <p class="info-item">
+                            <b>Downloads</b><br/>${downloads}
+                        </p>
+                    </div>
+                </div>
+            `
+        })
     .join('');
-  gallery.innerHTML += markup;
-  
-}
+  gallery.innerHTML = markup;
+ 
+ }
 
 function cleanGallery() {
   gallery.innerHTML = '';
