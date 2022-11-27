@@ -41,15 +41,14 @@ loadButton.addEventListener('click', () => {
   page +=1;
   const inputValue = input.value.trim();
   loadButton.style.display = 'none';
-  gallerySimpleLightbox.refresh();
+  
   imageApi(inputValue, page).then(foundData => {
     renderImageList(foundData.hits);
-
     const totalPages = foundData.totalHits / 40;
     if(totalPages <= page) {
-    loadButton.style.display = 'none';
     Notiflix.Notify.info("We're sorry, but you've reached the end of search results."
      );
+     loadButton.style.display = 'none';
     } else {
       Notiflix.Notify.success(
         `Hooray! We found ${foundData.totalHits} images.`
@@ -57,6 +56,7 @@ loadButton.addEventListener('click', () => {
       loadButton.style.display = 'block';
     }
   });
+  gallerySimpleLightbox.refresh();
 });
 
 
