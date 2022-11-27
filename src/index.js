@@ -1,6 +1,5 @@
 import { imageApi } from './imageApi';
 import Notiflix from 'notiflix';
-import axios from 'axios';
 import './css/styles.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -46,9 +45,10 @@ loadButton.addEventListener('click', () => {
     renderImageList(foundData.hits);
     const totalPages = foundData.totalHits / 40;
     if(totalPages <= page) {
+      loadButton.style.display = 'none';
     Notiflix.Notify.info("We're sorry, but you've reached the end of search results."
      );
-     loadButton.style.display = 'none';
+     
     } else {
       Notiflix.Notify.success(
         `Hooray! We found ${foundData.totalHits} images.`
